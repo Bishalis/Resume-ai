@@ -5,15 +5,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import PrimaryButton from './PrimaryButton';
+import { usePathname } from 'next/navigation';
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
   
   const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "Analyze Resume", href: "/analyze", current: false },
-    { name: "About", href: "/about", current: false },
-    { name: "Contact", href: "/contact", current: false },
+    { name: "Home", href: "/"},
+    { name: "Analyze Resume", href: "/analyze"},
+    { name: "About", href: "/about"},
+    { name: "Contact", href: "/contact"},
   ];
 
   function classNames(...classes: string[]) {
@@ -38,7 +40,7 @@ export default function NavBar() {
                 key={item.name}
                 href={item.href}
                 className={classNames(
-                  item.current
+                  pathname === item.href
                     ? "border-b-2 border-blue-600 text-blue-700"
                     : "text-gray-700 hover:bg-gray-200 hover:text-blue-700",
                   "rounded-md px-4 py-2 text-sm font-medium transition"
@@ -94,7 +96,7 @@ export default function NavBar() {
                 href={item.href}
                 onClick={toggleMenu}
                 className={classNames(
-                  item.current
+                  pathname === item.href
                     ? "bg-blue-100 text-blue-700"
                     : "text-gray-700 hover:bg-gray-200",
                   "block rounded-md px-4 py-2 text-sm font-medium"
