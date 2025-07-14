@@ -1,7 +1,9 @@
-import PrimaryButton from "./common/PrimaryButton";
+import NavBar from "./NavBar";
+import PrimaryButton from "./PrimaryButton";
 
 export default function HeroSection() {
   return (
+    <>
     <div className="px-6 py-20 bg-gray-50 	text-gray-800 min-h-[80vh]">
     <div className="max-w-7xl mx-auto px-4">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-20 items-center">
@@ -29,5 +31,6 @@ export default function HeroSection() {
     </div>
     </div>
   </div>
+  </>
   );
 }
