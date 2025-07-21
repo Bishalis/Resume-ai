@@ -15,7 +15,11 @@ export default function AnalyzePage() {
   }>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = async (resumeText:string, jobDescText:string ) => {
+    if (!resumeText || !resumeText) {
+        alert("Please provide both resume and job description");
+        return;
+      }
     setLoading(true);
       try {
         const response = await fetch('/api/analyze',{
@@ -23,7 +27,7 @@ export default function AnalyzePage() {
             headers: {
                 'Content-Type': 'application/json',
               },
-              body : JSON.stringify({resume, jobDescription:jobDesc})
+              body : JSON.stringify({resume:resumeText, jobDescription:jobDescText})
         })
         const data = await response.json();
         setResult(data)
@@ -52,7 +56,7 @@ export default function AnalyzePage() {
                   placeholder="Paste the job description here..."
                   onSubmit={(text) => {
                     setJobDesc(text);
-                    handleAnalyze();
+                    handleAnalyze(resume , jobDesc);
                   }}
                   buttonText={loading ? "Analyzing..." : "Analyze"}
                   loading={loading}
@@ -65,7 +69,7 @@ export default function AnalyzePage() {
           <div className="w-full lg:w-1/2">
             {!loading && result && (
               <div className="bg-white p-6 rounded-lg shadow-md h-full">
-                <AnalysisResult {...result} />
+                <AnalysisResult matchScore={result.matchScore}  missingSkills={result.missingSkills || []} suggestions={result.suggestions || []} />
               </div>
             )}
             

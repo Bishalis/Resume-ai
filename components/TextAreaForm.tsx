@@ -23,7 +23,6 @@ export default function TextAreaForm({onSubmit ,placeholder = 'Enter text...',bu
      
      const handleSubmit = (e:ChangeEvent<HTMLFormElement>) =>{
          e.preventDefault();
-         console.log('submitted text' + resume);
          onSubmit(resume);
      }
   

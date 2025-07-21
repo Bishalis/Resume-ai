@@ -1,35 +1,49 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 
-const openAI = new OpenAI({
-    apiKey : process.env.open_ai_url
+
+const client = new OpenAI({
+    apiKey : process.env.OPENAI_API_KEY
 });
 
-export async function POST(req:NextRequest){
-    const body = req.json();
-    console.log(body + "body received");
+export async function POST(req:Request){
     try{
        const{resume,jobDescription} = await req.json();
-       const completion = await openAI.chat.completions.create({
-        model: "gpt-4",
-        messages: [{
-          role: "system",
-          content: "Analyze this resume against the job description. Provide match score (0-100), missing skills, and improvement suggestions."
-        }, {
-          role: "user",
-          content: `Resume: ${resume}\n\nJob Description: ${jobDescription}`
-        }],
-        temperature: 0.7,
+       const prompt = `Analyze the resume against the job description and respond ONLY in the following JSON format:
+
+       {
+         "matchScore": number,
+         "missingSkills": string[],
+         "suggestions": string[]
+       }
+       
+       Resume:
+       ${resume}
+       
+       Job Description:
+       ${jobDescription}`;
+
+       const completion = await client.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'user', content: prompt },
+        ],
       });
 
-      const analysis = completion.choices[0].message.content || {};
-       return NextResponse.json(analysis);
+      console.log(completion.choices[0].message.content);
+      const analysis = completion.choices[0].message.content || "";
+      try {
+        const parsed = JSON.parse(analysis);
+        return NextResponse.json(parsed);
+      } catch (err) {
+        return NextResponse.json({ error: "Failed to parse analysis", raw: analysis }, { status: 500 });
+      }
     } 
     catch(error){
        return NextResponse.json(
        { error : "Analysis failed"},
-       {status:300}
+       {status:500}
        )
     }
 
