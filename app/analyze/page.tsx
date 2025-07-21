@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import TextAreaForm from '@/components/TextAreaForm';
 import AnalysisResult from '@/components/AnalysisResult';
-import { mockResult } from '@/components/common/mockResult';
+// import MockResult from '@/components/common/mockResult';
 
 export default function AnalyzePage() {
   const [resume, setResume] = useState('');
@@ -15,12 +15,21 @@ export default function AnalyzePage() {
   }>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setResult(mockResult);
-      setLoading(false);
-    }, 2000);
+      try {
+        const response = await fetch('/api/analyze',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              body : JSON.stringify({resume, jobDescription:jobDesc})
+        })
+        const data = await response.json();
+        setResult(data)
+      } finally{
+         setLoading(false);
+      }
   };
 
   return (

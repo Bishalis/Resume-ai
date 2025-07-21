@@ -27,7 +27,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-sm sticky top-0 z-50 ">
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Desktop Nav */}
         <div className="flex justify-between items-center">

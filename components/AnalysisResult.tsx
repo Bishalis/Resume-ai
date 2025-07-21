@@ -22,8 +22,8 @@ type Props = {
         <div className="mt-4">
           <h3 className="font-semibold">Suggestions:</h3>
           <ul className="list-disc list-inside">
-            {suggestions.map((s, i) => (
-              <li key={i}>{s}</li>
+            {suggestions.map((suggestion, index) => (
+              <li key={index}>{suggestion}</li>
             ))}
           </ul>
         </div>
