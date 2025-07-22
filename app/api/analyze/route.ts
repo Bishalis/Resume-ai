@@ -10,7 +10,7 @@ const client = new OpenAI({
 export async function POST(req:Request){
     try{
        const{resume,jobDescription} = await req.json();
-       const prompt = `Analyze the resume against the job description and respond ONLY in the following JSON format:
+       const prompt = `Analyze the resume against the job description. It should include 3 suggestions atleast, matchScore should be strictly integer(number) and respond ONLY in the following JSON format:
 
        {
          "matchScore": number,

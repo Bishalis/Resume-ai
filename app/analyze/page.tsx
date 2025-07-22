@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import TextAreaForm from '@/components/TextAreaForm';
-import AnalysisResult from '@/components/AnalysisResult';
-// import MockResult from '@/components/common/mockResult';
+import { useState } from "react";
+import TextAreaForm from "@/components/TextAreaForm";
+import AnalysisResult from "@/components/AnalysisResult";
+import ResumeUpload from "@/components/ResumeUpload";
 
 export default function AnalyzePage() {
-  const [resume, setResume] = useState('');
-  const [jobDesc, setJobDesc] = useState('');
+  const [resume, setResume] = useState("");
+  const [jobDesc, setJobDesc] = useState("");
   const [result, setResult] = useState<null | {
     matchScore: number;
     missingSkills: string[];
@@ -15,25 +15,28 @@ export default function AnalyzePage() {
   }>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = async (resumeText:string, jobDescText:string ) => {
-    if (!resumeText || !resumeText) {
-        alert("Please provide both resume and job description");
-        return;
-      }
+  const handleAnalyze = async (resumeText: string, jobDescText: string) => {
+    if (!resumeText || !jobDescText) {
+      alert("Please provide both resume and job description");
+      return;
+    }
     setLoading(true);
-      try {
-        const response = await fetch('/api/analyze',{
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json',
-              },
-              body : JSON.stringify({resume:resumeText, jobDescription:jobDescText})
-        })
-        const data = await response.json();
-        setResult(data)
-      } finally{
-         setLoading(false);
-      }
+    try {
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resume: resumeText,
+          jobDescription: jobDescText,
+        }),
+      });
+      const data = await response.json();
+      setResult(data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,11 +45,22 @@ export default function AnalyzePage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left side - Input forms */}
           <div className="w-full lg:w-1/2 bg-white p-6 rounded-lg shadow-md">
-            <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center ">AI Resume Analysis</h1>
-            
-            <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
+              AI Resume Analysis
+            </h1>
+
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <ResumeUpload onUpload={setResume} />
+                <div className="relative flex items-center py-2">
+                  <div className="flex-grow border-t border-gray-300"></div>
+                  <span className="flex-shrink mx-4 text-gray-500 text-sm">or</span>
+                  <div className="flex-grow border-t border-gray-300"></div>
+                </div>
+              </div>
+
               <TextAreaForm
-                placeholder="Paste your resume here..."
+                placeholder="Paste your resume text here..."
                 onSubmit={(text) => setResume(text)}
                 buttonText="Next: Add Job Description"
               />
@@ -56,7 +70,7 @@ export default function AnalyzePage() {
                   placeholder="Paste the job description here..."
                   onSubmit={(text) => {
                     setJobDesc(text);
-                    handleAnalyze(resume , jobDesc);
+                    handleAnalyze(resume, text);
                   }}
                   buttonText={loading ? "Analyzing..." : "Analyze"}
                   loading={loading}
@@ -69,16 +83,24 @@ export default function AnalyzePage() {
           <div className="w-full lg:w-1/2">
             {!loading && result && (
               <div className="bg-white p-6 rounded-lg shadow-md h-full">
-                <AnalysisResult matchScore={result.matchScore}  missingSkills={result.missingSkills || []} suggestions={result.suggestions || []} />
+                <AnalysisResult
+                  matchScore={result.matchScore}
+                  missingSkills={result.missingSkills || []}
+                  suggestions={result.suggestions || []}
+                />
               </div>
             )}
-            
+
             {/* Empty state */}
             {!result && (
               <div className="bg-white p-6 rounded-lg shadow-md h-full flex items-center justify-center">
                 <div className="text-center text-gray-500">
-                  <p className="text-lg">Your analysis results will appear here</p>
-                  <p className="text-sm mt-2">Paste both your resume and job description to begin</p>
+                  <p className="text-lg">
+                    Your analysis results will appear here
+                  </p>
+                  <p className="text-sm mt-2">
+                    Paste both your resume and job description to begin
+                  </p>
                 </div>
               </div>
             )}
