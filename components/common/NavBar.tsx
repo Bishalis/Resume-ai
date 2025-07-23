@@ -14,7 +14,7 @@ export default function NavBar() {
   const navigation = [
     { name: "Home", href: "/"},
     { name: "Analyze Resume", href: "/analyze"},
-    { name: "About", href: "/about"},
+    // { name: "About", href: "/about"},
     { name: "Contact", href: "/contact"},
   ];
 
@@ -31,7 +31,7 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Desktop Nav */}
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-extrabold text-blue-700">CWD</div>
+          <div className="text-2xl font-extrabold text-blue-700">CWB</div>
 
           {/* Desktop Nav Links - Hidden on mobile */}
           <div className="hidden md:flex space-x-4 items-center">
