@@ -5,10 +5,12 @@ import TextAreaForm from "@/components/TextAreaForm";
 import AnalysisResult from "@/components/AnalysisResult";
 import ResumeUpload from "@/components/ResumeUpload";
 import ExportPDF from "@/components/ExportPDF";
+import PrimaryButton from "@/components/common/PrimaryButton";
 
 export default function AnalyzePage() {
   const [resume, setResume] = useState("");
   const [jobDesc, setJobDesc] = useState("");
+  const [isFile, setIsFile] = useState(true);
   const [result, setResult] = useState<null | {
     matchScore: number;
     missingSkills: string[];
@@ -49,24 +51,35 @@ export default function AnalyzePage() {
             <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
               AI Resume Analysis
             </h1>
-
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <ResumeUpload onUpload={setResume} />
-                <div className="relative flex items-center py-2">
-                  <div className="flex-grow border-t border-gray-300"></div>
-                  <span className="flex-shrink mx-4 text-gray-500 text-sm">
-                    or
-                  </span>
-                  <div className="flex-grow border-t border-gray-300"></div>
+    
+            <div className="space-y-4 ">
+              {isFile ? (
+                <div className="space-y-3">
+                  <ResumeUpload onUpload={setResume} />
                 </div>
-              </div>
+              ) : (
+                <TextAreaForm
+                  placeholder="Paste your resume text here..."
+                  onSubmit={(text) => setResume(text)}
+                  buttonText="Next: Add Job Description"
+                />
+              )}
 
-              <TextAreaForm
-                placeholder="Paste your resume text here..."
-                onSubmit={(text) => setResume(text)}
-                buttonText="Next: Add Job Description"
-              />
+              <div className="relative flex items-center py-2 ">
+                <div className="flex-grow border-t border-gray-300"></div>
+                <span className="flex-shrink mx-4 text-gray-500 text-sm">
+                  or
+                </span>
+                <div className="flex-grow border-t border-gray-300"></div>
+              </div>
+              <div className="w-full flex justify-center">
+                <button
+                  className="bg-white text-blue-600 cursor-pointer text-center items-center hover:"
+                  onClick={() => setIsFile(!isFile)}
+                >
+                  {isFile ? "Paste your text resume" : "Upload a file resume"}
+                </button>
+              </div>
 
               {resume && (
                 <TextAreaForm
@@ -80,6 +93,7 @@ export default function AnalyzePage() {
                 />
               )}
             </div>
+
           </div>
 
           {/* Right side - Results */}
