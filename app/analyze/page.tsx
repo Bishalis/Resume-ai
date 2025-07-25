@@ -4,6 +4,7 @@ import { useState } from "react";
 import TextAreaForm from "@/components/TextAreaForm";
 import AnalysisResult from "@/components/AnalysisResult";
 import ResumeUpload from "@/components/ResumeUpload";
+import ExportPDF from "@/components/ExportPDF";
 
 export default function AnalyzePage() {
   const [resume, setResume] = useState("");
@@ -54,7 +55,9 @@ export default function AnalyzePage() {
                 <ResumeUpload onUpload={setResume} />
                 <div className="relative flex items-center py-2">
                   <div className="flex-grow border-t border-gray-300"></div>
-                  <span className="flex-shrink mx-4 text-gray-500 text-sm">or</span>
+                  <span className="flex-shrink mx-4 text-gray-500 text-sm">
+                    or
+                  </span>
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
               </div>
@@ -88,21 +91,30 @@ export default function AnalyzePage() {
                   missingSkills={result.missingSkills || []}
                   suggestions={result.suggestions || []}
                 />
+                <div className="text-center pt-2.5">
+                  <ExportPDF />
+                  <p className="text-sm mt-2 text-center text-gray-500">
+                    Note that this is an AI Generated resume, remember to modify
+                    it.
+                  </p>
+                </div>
               </div>
             )}
 
             {/* Empty state */}
             {!result && (
-              <div className="bg-white p-6 rounded-lg shadow-md h-full flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <p className="text-lg">
-                    Your analysis results will appear here
-                  </p>
-                  <p className="text-sm mt-2">
-                    Paste both your resume and job description to begin
-                  </p>
+              <>
+                <div className="bg-white p-6 rounded-lg shadow-md h-full flex items-center justify-center flex-col">
+                  <div className="text-center text-gray-500">
+                    <p className="text-lg">
+                      Your analysis results will appear here
+                    </p>
+                    <p className="text-sm mt-2">
+                      Paste both your resume and job description to begin
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
