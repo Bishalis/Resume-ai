@@ -11,28 +11,35 @@ export async function POST(req:Request){
     try{
        const{resume,jobDescription} = await req.json();
        const prompt = `
-       Analyze the provided resume against the job description based on the following strict criteria:
+       You are a professional resume evaluator. Analyze the resume strictly against the job description using the criteria below. Do NOT make assumptions beyond what's explicitly stated.
        
-       1.  **matchScore**: Calculate a score as a whole integer between 0 and 100. The score represents the percentage of direct alignment between the resume's experience/skills and the job description's "hard" requirements.
-       2.  **missingSkills**: Identify key skills, tools, or qualifications explicitly mentioned in the job description that are NOT found in the resume.
-       3.  **suggestions**: Provide at least 3 distinct and actionable suggestions for the candidate to improve their resume for this specific job. Suggestions should be concrete (e.g., "Quantify your achievement in the 'Project X' role by adding metrics like 'improved efficiency by 15%'").
-       
-       Respond ONLY in the following JSON format. Do not add any text before or after the JSON object.
+       Return your answer as a **valid JSON** object in this exact format:
        
        {
-         "matchScore": number,
+         "matchScore": number, 
          "missingSkills": string[],
          "suggestions": string[]
        }
        
+       CRITERIA:
+       
+       1. **matchScore** (0–100): Percentage alignment between resume and job description based on hard requirements (skills, tools, qualifications).
+       2. **missingSkills**: List ONLY those hard skills or tools in the job description that are completely missing from the resume.
+       3. **suggestions**: At least 3 concrete, resume-specific improvements (e.g., “Quantify results from Project X with specific metrics”).
+       
        ---
        Resume:
+       """
        ${resume}
+       """
        
        ---
        Job Description:
+       """
        ${jobDescription}
+       """
        `;
+       
 
        const completion = await client.chat.completions.create({
         model: 'gpt-3.5-turbo',

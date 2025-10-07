@@ -60,7 +60,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
-              © {currentYear} CWB. All rights reserved.
+              © {currentYear} ResAnalyser. All rights reserved.
             </div>
   
             <div className="flex space-x-6">
@@ -70,7 +70,7 @@ const Footer = () => {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                  className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400"
                 >
                   <span className="sr-only">{link.name}</span>
                   {link.icon}

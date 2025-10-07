@@ -7,7 +7,7 @@ type Props = {
   export default function AnalysisResult({ matchScore, missingSkills, suggestions }: Props) {
     return (
       <div className="mt-10 bg-white p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-bold text-blue-700">Analysis Result</h2>
+        <h2 className="text-2xl font-bold text-green-700">Analysis Result</h2>
         {matchScore && (
         <p className="mt-4 text-lg">Match Score: <span className="font-bold">{matchScore}%</span></p>
         )

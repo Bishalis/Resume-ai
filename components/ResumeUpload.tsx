@@ -85,7 +85,7 @@ export default function ResumeUpload({ onUpload }: { onUpload: (text: string) =>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={`h-10 w-10 ${
-              error ? "text-red-500" : file ? "text-green-500" : "text-blue-500"
+              error ? "text-red-500" : file ? "text-green-500" : "text-green-500"
             }`}
             fill="none"
             viewBox="0 0 24 24"
@@ -109,7 +109,7 @@ export default function ResumeUpload({ onUpload }: { onUpload: (text: string) =>
             <span className="text-green-700 font-medium">{file.name}</span>
           ) : (
             <span className="text-gray-700">
-              <span className="font-medium text-blue-600">Click to upload</span> or drag and drop
+              <span className="font-medium text-green-600">Click to upload</span> or drag and drop
             </span>
           )}
         </p>

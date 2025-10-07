@@ -1,6 +1,6 @@
-
-
 'use client';
+
+
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -14,9 +14,9 @@ export default function NavBar() {
   const navigation = [
     { name: "Home", href: "/"},
     { name: "Analyze Resume", href: "/analyze"},
-    // { name: "About", href: "/about"},
     { name: "Contact", href: "/contact"},
   ];
+
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -31,7 +31,9 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Desktop Nav */}
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-extrabold text-blue-700">CWB</div>
+          {/* <div className="text-2xl font-extrabold text-green-700">CWB</div> */}
+          <img src={'/assets/Dalle.webp'} className='w-15 h-15 cursor-pointer rounded-full'/>
+
 
           {/* Desktop Nav Links - Hidden on mobile */}
           <div className="hidden md:flex space-x-4 items-center">
@@ -41,15 +43,21 @@ export default function NavBar() {
                 href={item.href}
                 className={classNames(
                   pathname === item.href
-                    ? "border-b-2 border-blue-600 text-blue-700"
-                    : "text-gray-700 hover:bg-gray-200 hover:text-blue-700",
+                    ? "border-b-2 border-green-600 text-green-700"
+                    : "text-gray-700 hover:bg-gray-200 hover:text-green-700",
                   "rounded-md px-4 py-2 text-sm font-medium transition"
                 )}
               >
                 {item.name}
               </Link>
             ))}
-            <PrimaryButton className="ml-4">Get Started</PrimaryButton>
+
+             <Link href={'/login'}>
+            <PrimaryButton  className="ml-4 bg-white lg:text-green-600 lg:hover:text-green-700 lg:hover:bg-white font-bold">Login</PrimaryButton>
+            </Link>
+            <Link href={'/signup'}>
+            <PrimaryButton  className="ml-4">Sign Up</PrimaryButton>
+            </Link>
           </div>
 
           {/* Mobile menu button - Hidden on desktop */}
@@ -57,7 +65,7 @@ export default function NavBar() {
             <PrimaryButton className="mr-4">Get Started</PrimaryButton>
             <button
               onClick={toggleMenu}
-              className="text-gray-700 hover:text-blue-700 focus:outline-none"
+              className="text-gray-700 hover:text-green-700 focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
@@ -97,7 +105,7 @@ export default function NavBar() {
                 onClick={toggleMenu}
                 className={classNames(
                   pathname === item.href
-                    ? "bg-blue-100 text-blue-700"
+                    ? "bg-blue-100 text-green-700"
                     : "text-gray-700 hover:bg-gray-200",
                   "block rounded-md px-4 py-2 text-sm font-medium"
                 )}

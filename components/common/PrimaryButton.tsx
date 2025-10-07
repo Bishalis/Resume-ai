@@ -21,7 +21,7 @@ export default function PrimaryButton({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        'bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition duration-200 ease-in-out',
+        'bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition duration-200 ease-in-out cursor-pointer',
         disabled && 'opacity-50 cursor-not-allowed',
         className
       )}

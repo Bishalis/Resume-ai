@@ -4,17 +4,21 @@ import { useState } from "react";
 import TextAreaForm from "@/components/TextAreaForm";
 import AnalysisResult from "@/components/AnalysisResult";
 import ResumeUpload from "@/components/ResumeUpload";
-import ExportPDF from "@/components/ExportPDF";
+// import ExportPDF from "@/components/ExportPDF";
 import PrimaryButton from "@/components/common/PrimaryButton";
+import { ExportPDF } from "@/components/ExportPDF";
 
 export default function AnalyzePage() {
   const [resume, setResume] = useState("");
+  const [sampleRequest,setSampleRequest] = useState(true);
+  const [sampleResume,setSampleResume] = useState("");
   const [jobDesc, setJobDesc] = useState("");
   const [isFile, setIsFile] = useState(true);
   const [result, setResult] = useState<null | {
     matchScore: number;
     missingSkills: string[];
     suggestions: string[];
+    // samplePdf:string[];
   }>(null);
   const [loading, setLoading] = useState(false);
 
@@ -42,13 +46,36 @@ export default function AnalyzePage() {
     }
   };
 
+  const handleSampleResume = async (resumeText: string, jobDescText: string) =>{
+    setLoading(true);
+    setSampleRequest(false)
+    try {
+      const response = await fetch("/api/sampleResume", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resume: resumeText,
+          jobDescription: jobDescText,
+        }),
+      });
+      const data = await response.json();
+       console.log("htmlcontent" + data)
+      setSampleResume(data.htmlContent);
+      
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left side - Input forms */}
           <div className="w-full lg:w-1/2 bg-white p-6 rounded-lg shadow-md">
-            <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
+            <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
               AI Resume Analysis
             </h1>
     
@@ -74,7 +101,7 @@ export default function AnalyzePage() {
               </div>
               <div className="w-full flex justify-center">
                 <button
-                  className="bg-white text-blue-600 cursor-pointer text-center items-center hover:"
+                  className="bg-white text-green-600 cursor-pointer text-center items-center hover:"
                   onClick={() => setIsFile(!isFile)}
                 >
                   {isFile ? "Paste your text resume" : "Upload a file resume"}
@@ -106,7 +133,8 @@ export default function AnalyzePage() {
                   suggestions={result.suggestions || []}
                 />
                 <div className="text-center pt-2.5">
-                  <ExportPDF />
+                  {sampleRequest?  <PrimaryButton onClick={()=>handleSampleResume(resume,jobDesc)}> Generate sample resume </PrimaryButton> :
+                    <ExportPDF htmlContent={sampleResume}/>}
                   <p className="text-sm mt-2 text-center text-gray-500">
                     Note that this is an AI Generated resume, remember to modify
                     it.

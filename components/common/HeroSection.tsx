@@ -1,4 +1,5 @@
 import PrimaryButton from "./PrimaryButton";
+import Link from "next/link";
 
 type InfoType = {
   heading: string;
@@ -14,14 +15,17 @@ export default function HeroSection({
   return (
     <>
       <div>
-        <h1 className="font-extrabold  leading-snug text-4xl text-blue-700">
+        <h1 className="font-extrabold  leading-snug text-4xl text-green-700">
           {heading}{" "}
         </h1>
 
         <p className="my-8 text-lg leading-relaxed text-gray-600 mt-4">
           {paragraph}
         </p>
+        <Link href={'/analyze'}>
         <PrimaryButton>Get Started</PrimaryButton>
+        </Link>
+       
       </div>
     </>
   );
