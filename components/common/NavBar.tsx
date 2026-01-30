@@ -31,8 +31,10 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Desktop Nav */}
         <div className="flex justify-between items-center">
+          <div className='flex items-center gap-3'>
           <div className="text-2xl font-extrabold text-green-700">ResAnalyser</div>
-          {/* <img src={'/assets/Dalle.webp'} className='w-15 h-15 cursor-pointer rounded-full'/> */}
+          </div>
+          
 
 
           {/* Desktop Nav Links - Hidden on mobile */}

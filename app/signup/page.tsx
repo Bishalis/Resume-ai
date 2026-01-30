@@ -51,7 +51,7 @@ const SignupPage = () => {
 
         <PrimaryButton>Sign Up</PrimaryButton>
         <h1 className="text-center">
-          Does't have an account?{" "}
+          Already have an account?{" "}
           <Link href="/login" className="text-green-700 hover:underline">
             Login
           </Link>

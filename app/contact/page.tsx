@@ -1,8 +1,18 @@
+"use client"
+import React from "react";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import SocialLinks from "@/components/common/SocialLinks";
 import { Mail } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 export default function ContactPage() {
+const[name,setName] = useState("");
+const[email,setEmail] = useState("");
+const[comment,setComment] = useState("");
+  const handleContactForm = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+     console.log(name,email,comment + "form submitted")
+  }
   return (
     <div className="h-[100vh] flex items-center justify-center  lg:justify-around  mx-auto flex-col md:flex-row gap-10 ">
       <div className="md:w-[40vw]">
@@ -24,7 +34,8 @@ export default function ContactPage() {
      
        
         <form
-          action=""
+          method="post"
+          onSubmit={handleContactForm}
           className="flex flex-col gap-10  md:w-[60vh] text-center mt-10 text-shadow-white shadow p-10"
         >
           <input
@@ -32,9 +43,13 @@ export default function ContactPage() {
             name="Name"
             placeholder="Enter your full name"
             className=" rounded-sm p-2 border-b-2 border-green-700"
+            onChange={(e)=>setName(e.target.value)}
+
           />
-          <input name="Email" placeholder="Enter your Email " className="rounded-sm p-2 border-b-2 border-green-700" required/>
+            
+          <input onChange={(e)=>setEmail(e.target.value)} name="Email" placeholder="Enter your Email " className="rounded-sm p-2 border-b-2 border-green-700" required />
           <textarea
+          onChange={(e)=>setComment(e.target.value)}
             name=""
             id=""
             placeholder="Is there any concerns..."
