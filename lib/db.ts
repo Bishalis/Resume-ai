@@ -7,8 +7,14 @@ if (!MONGO_DB_URI) {
 }
 
 async function connectToDatabase() {
+
+    if(mongoose.connection.readyState >=1){
+        console.log("Already connected to MongoDB");
+        return;
+    }
     await mongoose.connect(MONGO_DB_URI);
     console.log("Connected to MongoDB");
+    
 }
 
 export default connectToDatabase;
