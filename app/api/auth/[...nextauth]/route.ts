@@ -5,6 +5,9 @@ import { User } from "@/models/user";
 import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -31,7 +34,7 @@ const handler = NextAuth({
         if (!isPasswordValid) {
           return null;
         }
-         
+
         return {
           id: user._id.toString(),
           email: user.email,
@@ -39,6 +42,23 @@ const handler = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.email = token.email;
+      }
+      return session;
+    },
+  },
+  secret: process.env.BETTER_AUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
