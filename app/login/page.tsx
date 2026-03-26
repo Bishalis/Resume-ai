@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import Link from "next/link";
 import React from "react";

@@ -6,8 +6,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import PrimaryButton from './PrimaryButton';
 import { usePathname } from 'next/navigation';
+import { useSession,signOut } from 'next-auth/react';
 
 export default function NavBar() {
+  const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   
@@ -53,13 +55,16 @@ export default function NavBar() {
                 {item.name}
               </Link>
             ))}
-
-             <Link href={'/login'}>
-            <PrimaryButton  className="ml-4 bg-white lg:text-green-600 lg:hover:text-green-700 lg:hover:bg-white font-bold">Login</PrimaryButton>
-            </Link>
-            <Link href={'/signup'}>
-            <PrimaryButton  className="ml-4">Sign Up</PrimaryButton>
-            </Link>
+            
+            {status ==="loading"?(<p>Loading...</p>):session?(<button onClick={() => signOut()}>
+          Logout
+        </button>
+            ):( 
+            
+            <Link href={'/login'}>
+            <PrimaryButton  className="ml-4">Login</PrimaryButton>
+            </Link>)}
+         
           </div>
 
           {/* Mobile menu button - Hidden on desktop */}

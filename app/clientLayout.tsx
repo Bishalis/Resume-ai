@@ -1,12 +1,16 @@
-'use client';
+"use client";
 
 import { usePathname } from "next/navigation";
 import NavBar from "@/components/common/NavBar";
 import Footer from "@/components/common/Footer";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathName = usePathname();
-  const noNavBarPaths = ['/login', '/signup'];
+  const noNavBarPaths = ["/login", "/signup"];
   const hideNav = noNavBarPaths.includes(pathName);
 
   return (
