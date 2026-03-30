@@ -23,7 +23,7 @@ const handler = NextAuth({
         });
 
         if (!user) {
-          return null;
+          throw new Error("Invalid password");
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -58,7 +58,7 @@ const handler = NextAuth({
       return session;
     },
   },
-  secret: process.env.BETTER_AUTH_SECRET,
+  secret: process.env.NEXTAUTH_URL,
 });
 
 export { handler as GET, handler as POST };

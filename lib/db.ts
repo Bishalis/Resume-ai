@@ -8,7 +8,7 @@ if (!MONGO_DB_URI) {
 
 async function connectToDatabase() {
 
-    if(mongoose.connection.readyState >=1){
+    if(mongoose.connection.readyState === 1){
         console.log("Already connected to MongoDB");
         return;
     }

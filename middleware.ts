@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function middleware(req:NextRequest){
-    const token  = await getToken({req, secret:process.env.BETTER_AUTH_SECRET})
+    const token  = await getToken({req, secret:process.env.NEXTAUTH_URL})
     if(!token){
         const absoluteURL = new URL("/login", req.nextUrl.origin);
         return NextResponse.redirect(absoluteURL);
@@ -13,5 +13,5 @@ export async function middleware(req:NextRequest){
 }
 
 export const config = {
-  matcher: ["/dashboard", "/analyze", "/contact"],
+  matcher: ["/analyze", "/contact"],
 };

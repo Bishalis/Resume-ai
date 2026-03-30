@@ -1,24 +1,21 @@
-'use client';
+"use client";
 
-
-
-import { useState } from 'react';
-import Link from 'next/link';
-import PrimaryButton from './PrimaryButton';
-import { usePathname } from 'next/navigation';
-import { useSession,signOut } from 'next-auth/react';
+import { useState } from "react";
+import Link from "next/link";
+import PrimaryButton from "./PrimaryButton";
+import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 export default function NavBar() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  
-  const navigation = [
-    { name: "Home", href: "/"},
-    { name: "Analyze Resume", href: "/analyze"},
-    { name: "Contact", href: "/contact"},
-  ];
 
+  const navigation = [
+    { name: "Home", href: "/" },
+    { name: "Analyze Resume", href: "/analyze" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -33,11 +30,11 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Desktop Nav */}
         <div className="flex justify-between items-center">
-          <div className='flex items-center gap-3'>
-          <div className="text-2xl font-extrabold text-green-700">ResAnalyser</div>
+          <div className="flex items-center gap-3">
+            <div className="text-2xl font-extrabold text-green-700">
+              ResAnalyser
+            </div>
           </div>
-          
-
 
           {/* Desktop Nav Links - Hidden on mobile */}
           <div className="hidden md:flex space-x-4 items-center">
@@ -49,22 +46,27 @@ export default function NavBar() {
                   pathname === item.href
                     ? "border-b-2 border-green-600 text-green-700"
                     : "text-gray-700 hover:bg-gray-200 hover:text-green-700",
-                  "rounded-md px-4 py-2 text-sm font-medium transition"
+                  "rounded-md px-4 py-2 text-sm font-medium transition",
                 )}
               >
                 {item.name}
               </Link>
             ))}
-            
-            {status ==="loading"?(<p>Loading...</p>):session?(<button onClick={() => signOut()}>
-          Logout
-        </button>
-            ):( 
-            
-            <Link href={'/login'}>
-            <PrimaryButton  className="ml-4">Login</PrimaryButton>
-            </Link>)}
-         
+
+            {status === "loading" ? (
+              <p>Loading...</p>
+            ) : session ? (
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href={"/login"}>
+                <PrimaryButton className="ml-4">Login</PrimaryButton>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button - Hidden on desktop */}
@@ -114,7 +116,7 @@ export default function NavBar() {
                   pathname === item.href
                     ? "bg-blue-100 text-green-700"
                     : "text-gray-700 hover:bg-gray-200",
-                  "block rounded-md px-4 py-2 text-sm font-medium"
+                  "block rounded-md px-4 py-2 text-sm font-medium",
                 )}
               >
                 {item.name}

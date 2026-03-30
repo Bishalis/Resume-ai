@@ -3,26 +3,30 @@ import PrimaryButton from "@/components/common/PrimaryButton";
 import Link from "next/link";
 import React from "react";
 import { useState } from "react";
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
- const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (e: any)=>{
-     e.preventDefault();
-     await signIn("credentials", {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+ await signIn("credentials", {
       email,
       password,
-      redirect: false,
-      callbackUrl: "/"
-    })
-  }
+      callbackUrl: "/",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-10 justify-center items-center min-h-[100vh] ">
       <h2 className="text-green-700 font-extrabold text-3xl"> Please Login</h2>
-      <form className="flex flex-col gap-2  p-10 rounded shadow-lg w-100vw  md:w-[30vw] lg:w-[40vw]" onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col gap-2  p-10 rounded shadow-lg w-100vw  md:w-[30vw] lg:w-[40vw]"
+        onSubmit={handleSubmit}
+      >
         <label htmlFor="Email" className="font-bold text-gray-600">
           Enter email
         </label>
@@ -31,7 +35,7 @@ const LoginPage = () => {
           name="Email"
           placeholder="example@gmail.com"
           className="p-3 border-b-2 rounded-sm border-green-700"
-           onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <br />
 
@@ -43,7 +47,7 @@ const LoginPage = () => {
           name="Password"
           placeholder="Enter your password"
           className="p-3 border-b-2 rounded-sm border-green-700"
-           onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <br />
 
