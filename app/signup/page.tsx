@@ -98,7 +98,7 @@ const SignupPage = () => {
         <PrimaryButton>Sign Up</PrimaryButton>
         <h1 className="text-center">
           Already have an account?{" "}
-          <Link href="/login" className="text-green-700 hover:underline">
+          <Link href="/login" className="text-green-700 hover:underline w-full text-center">
             Login
           </Link>
         </h1>
