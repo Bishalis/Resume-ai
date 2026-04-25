@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function middleware(req:NextRequest){
-    const token  = await getToken({req, secret:process.env.NEXTAUTH_URL})
+    const token  = await getToken({req, secret:process.env.NEXTAUTH_SECRET})
     if(!token){
         const absoluteURL = new URL("/login", req.nextUrl.origin);
         return NextResponse.redirect(absoluteURL);
