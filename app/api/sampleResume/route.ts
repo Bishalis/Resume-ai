@@ -55,7 +55,7 @@ export async function POST(req:Request){
             ],
           });
     
-          console.log(completion.choices[0].message.content);
+          
           const sampleResume = completion.choices[0].message.content || "";
           return NextResponse.json({htmlContent: sampleResume});
         } 

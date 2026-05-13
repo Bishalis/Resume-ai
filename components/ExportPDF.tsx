@@ -4,33 +4,38 @@ type props ={
    htmlContent : string;
 }
 
-export const   ExportPDF =  ({htmlContent} : props) => {
-   console.log(htmlContent);
-  const handleHTMLContent = async ()=>{
-      try {
-         const response = await fetch('/api/parse-exportPDF',{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({htmlContent}),
-         })
+export const ExportPDF = ({ htmlContent }: props) => {
+  const handleHTMLContent = async () => {
+    try {
+      const response = await fetch("/api/parse-exportPDF", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ htmlContent }),
+      });
 
-       if(!response.ok){
-         throw new Error("Failed to generate pdf");
-       }
-
-       const blob = await response.blob();
-       const url = URL.createObjectURL(blob);
-       const link = document.createElement('a');
-       link.href = url;
-       link.download = 'tailored_resume.pdf';
-       link.click();
-
-       URL.revokeObjectURL(url);
-      } catch (error) {
-         console.log(error);
-         alert('pdf fetch failed')
+      if (!response.ok) {
+        const ct = response.headers.get("content-type") ?? "";
+        if (ct.includes("application/json")) {
+          const data = (await response.json()) as { error?: string };
+          throw new Error(data.error ?? `PDF export failed (${response.status})`);
+        }
+        throw new Error(`PDF export failed (${response.status})`);
       }
-  }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "tailored_resume.pdf";
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+      alert(
+        error instanceof Error ? error.message : "PDF export failed",
+      );
+    }
+  };
   return (
     <button className="inline-flex items-center gap-2 rounded-lg  px-5 py-2.5  font-semibold text-red-500  transition hover:text-red-700 cursor-pointer" onClick={handleHTMLContent}>
       <svg

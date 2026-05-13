@@ -7,11 +7,13 @@ import ResumeUpload from "@/components/ResumeUpload";
 // import ExportPDF from "@/components/ExportPDF";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import { ExportPDF } from "@/components/ExportPDF";
+import SampleResumePreview from "@/components/SampleResumePreview";
 
 export default function AnalyzePage() {
   const [resume, setResume] = useState("");
-  const [sampleRequest,setSampleRequest] = useState(true);
-  const [sampleResume,setSampleResume] = useState("");
+  const [sampleRequest, setSampleRequest] = useState(true);
+  const [sampleResume, setSampleResume] = useState("");
+  const [sampleLoading, setSampleLoading] = useState(false);
   const [jobDesc, setJobDesc] = useState("");
   const [isFile, setIsFile] = useState(true);
   const [result, setResult] = useState<null | {
@@ -41,14 +43,18 @@ export default function AnalyzePage() {
       });
       const data = await response.json();
       setResult(data);
+      setSampleRequest(true);
+      setSampleResume("");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSampleResume = async (resumeText: string, jobDescText: string) =>{
-    setLoading(true);
-    setSampleRequest(false)
+  const handleSampleResume = async (
+    resumeText: string,
+    jobDescText: string
+  ) => {
+    setSampleLoading(true);
     try {
       const response = await fetch("/api/sampleResume", {
         method: "POST",
@@ -61,13 +67,28 @@ export default function AnalyzePage() {
         }),
       });
       const data = await response.json();
-       console.log("htmlcontent" + data)
-      setSampleResume(data.htmlContent);
-      
+      if (!response.ok) {
+        throw new Error(
+          typeof data.error === "string"
+            ? data.error
+            : "Failed to generate sample resume"
+        );
+      }
+      const html = data.htmlContent as string | undefined;
+      if (!html?.trim()) {
+        throw new Error("No resume content returned");
+      }
+      setSampleResume(html);
+      setSampleRequest(false);
+    } catch (e) {
+      console.error(e);
+      alert(
+        e instanceof Error ? e.message : "Failed to generate sample resume"
+      );
     } finally {
-      setLoading(false);
+      setSampleLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -132,10 +153,35 @@ export default function AnalyzePage() {
                   missingSkills={result.missingSkills || []}
                   suggestions={result.suggestions || []}
                 />
-                <div className="text-center pt-2.5">
-                  {sampleRequest?  <PrimaryButton onClick={()=>handleSampleResume(resume,jobDesc)}> Generate sample resume </PrimaryButton> :
-                    <ExportPDF htmlContent={sampleResume}/>}
-                  <p className="text-sm mt-2 text-center text-gray-500">
+                <div className="pt-2.5">
+                  {sampleRequest ? (
+                    <div className="text-center">
+                      <PrimaryButton
+                        type="button"
+                        onClick={() =>
+                          handleSampleResume(resume, jobDesc)
+                        }
+                        disabled={sampleLoading}
+                      >
+                        {sampleLoading
+                          ? "Generating…"
+                          : "Generate sample resume"}
+                      </PrimaryButton>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <h3 className="text-left text-sm font-semibold text-gray-800">
+                          Sample resume preview
+                        </h3>
+                        <div className="flex shrink-0 justify-start sm:justify-end">
+                          <ExportPDF htmlContent={sampleResume} />
+                        </div>
+                      </div>
+                      <SampleResumePreview html={sampleResume} />
+                    </div>
+                  )}
+                  <p className="mt-2 text-center text-sm text-gray-500">
                     Note that this is an AI Generated resume, remember to modify
                     it.
                   </p>
