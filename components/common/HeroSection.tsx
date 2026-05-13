@@ -14,7 +14,7 @@ export default function HeroSection({
 }: InfoType) {
   return (
     <>
-      <div>
+      <div data-section={name ?? undefined}>
         <h1 className="font-extrabold  leading-snug text-4xl text-green-700">
           {heading}{" "}
         </h1>

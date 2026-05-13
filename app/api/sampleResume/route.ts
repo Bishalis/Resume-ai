@@ -59,7 +59,7 @@ export async function POST(req:Request){
           const sampleResume = completion.choices[0].message.content || "";
           return NextResponse.json({htmlContent: sampleResume});
         } 
-        catch(error){
+        catch {
            return NextResponse.json(
            { error : "Analysis failed"},
            {status:500}

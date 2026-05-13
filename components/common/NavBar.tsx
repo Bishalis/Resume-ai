@@ -11,11 +11,18 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  const navigation = [
+  const baseNavigation = [
     { name: "Home", href: "/" },
     { name: "Analyze Resume", href: "/analyze" },
     { name: "Contact", href: "/contact" },
   ];
+
+  const adminNav =
+    session?.user?.role === "admin"
+      ? [{ name: "Admin", href: "/admin/users" as const }]
+      : [];
+
+  const navigation = [...baseNavigation, ...adminNav];
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -38,20 +45,26 @@ export default function NavBar() {
 
           {/* Desktop Nav Links - Hidden on mobile */}
           <div className="hidden md:flex space-x-4 items-center">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={classNames(
-                  pathname === item.href
-                    ? "border-b-2 border-green-600 text-green-700"
-                    : "text-gray-700 hover:bg-gray-200 hover:text-green-700",
-                  "rounded-md px-4 py-2 text-sm font-medium transition",
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive =
+                item.name === "Admin"
+                  ? pathname?.startsWith("/admin")
+                  : pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={classNames(
+                    isActive
+                      ? "border-b-2 border-green-600 text-green-700"
+                      : "text-gray-700 hover:bg-gray-200 hover:text-green-700",
+                    "rounded-md px-4 py-2 text-sm font-medium transition",
+                  )}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
 
             {status === "loading" ? (
               <p>Loading...</p>
@@ -107,21 +120,49 @@ export default function NavBar() {
         {/* Mobile Menu - Only shows when isMenuOpen is true */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-2">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={toggleMenu}
-                className={classNames(
-                  pathname === item.href
-                    ? "bg-blue-100 text-green-700"
-                    : "text-gray-700 hover:bg-gray-200",
-                  "block rounded-md px-4 py-2 text-sm font-medium",
-                )}
+            {navigation.map((item) => {
+              const isActive =
+                item.name === "Admin"
+                  ? pathname?.startsWith("/admin")
+                  : pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={toggleMenu}
+                  className={classNames(
+                    isActive
+                      ? "bg-blue-100 text-green-700"
+                      : "text-gray-700 hover:bg-gray-200",
+                    "block rounded-md px-4 py-2 text-sm font-medium",
+                  )}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+            {status === "loading" ? (
+              <p className="px-4 text-sm text-gray-500">Loading...</p>
+            ) : session ? (
+              <button
+                type="button"
+                className="block w-full text-left rounded-md px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                onClick={() => {
+                  toggleMenu();
+                  void signOut({ callbackUrl: "/" });
+                }}
               >
-                {item.name}
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                onClick={toggleMenu}
+                className="block rounded-md px-4 py-2 text-sm font-medium text-green-700"
+              >
+                Login
               </Link>
-            ))}
+            )}
           </div>
         )}
       </div>

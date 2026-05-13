@@ -1,12 +1,20 @@
 import mongoose from "mongoose";
 
-const contactSchema = new mongoose.Schema({
+export type ContactStatus = "open" | "resolved" | "archived";
+
+const contactSchema = new mongoose.Schema(
+  {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     message: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["open", "resolved", "archived"],
+      default: "open",
+    },
+  },
+  { timestamps: true },
+);
 
-})
-
-
-
-export const Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema);
+export const Contact =
+  mongoose.models.Contact || mongoose.model("Contact", contactSchema);

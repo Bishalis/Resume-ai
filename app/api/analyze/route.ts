@@ -53,11 +53,11 @@ export async function POST(req:Request){
       try {
         const parsed = JSON.parse(analysis);
         return NextResponse.json(parsed);
-      } catch (err) {
+      } catch {
         return NextResponse.json({ error: "Failed to parse analysis", raw: analysis }, { status: 500 });
       }
     } 
-    catch(error){
+    catch {
        return NextResponse.json(
        { error : "Analysis failed"},
        {status:500}
